@@ -1,0 +1,419 @@
+body {
+    background: linear-gradient(135deg, #019796 0%, #016d6d 100%);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto de ondas de fondo */
+body::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 127, 80, 0.1) 0%, transparent 70%);
+    animation: wave 15s ease-in-out infinite;
+    top: -50%;
+    left: -50%;
+}
+
+@keyframes wave {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(30px, 30px) rotate(180deg);
+    }
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    max-width: 400px;
+    width: 100%;
+    animation: slideIn 0.5s ease-out;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header h1 {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #019796, #FF7F50);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.login-header p {
+    color: #666;
+    margin: 0;
+}
+
+.form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #019796;
+    box-shadow: 0 0 0 0.2rem rgba(1, 151, 150, 0.25);
+}
+
+.form-control:hover {
+    border-color: rgba(1, 151, 150, 0.5);
+}
+
+.btn-login {
+    background: linear-gradient(45deg, #019796, #01b5b4);
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem;
+    font-weight: 600;
+    color: white;
+    width: 100%;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 127, 80, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-login:hover::before {
+    left: 100%;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(1, 151, 150, 0.4);
+    color: white;
+    background: linear-gradient(45deg, #01b5b4, #019796);
+}
+
+.btn-login:disabled {
+    opacity: 0.7;
+    transform: none;
+    cursor: not-allowed;
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-icon {
+    font-size: 3rem;
+    background: linear-gradient(135deg, #019796, #FF7F50);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { 
+        transform: scale(1); 
+    }
+    50% { 
+        transform: scale(1.05); 
+    }
+    100% { 
+        transform: scale(1); 
+    }
+}
+
+.input-group-text {
+    background: transparent;
+    border: 2px solid #e9ecef;
+    border-right: none;
+    border-radius: 10px 0 0 10px;
+    color: #019796;
+    transition: all 0.3s ease;
+}
+
+.input-group .form-control {
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+}
+
+.input-group:focus-within .input-group-text {
+    border-color: #019796;
+    color: #016d6d;
+    background-color: rgba(1, 151, 150, 0.05);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    z-index: 10;
+    padding: 0.25rem;
+    border-radius: 3px;
+    transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: #019796;
+}
+
+.position-relative-password {
+    position: relative;
+}
+
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        margin: 1rem;
+        padding: 2rem;
+    }
+    
+    .login-icon {
+        font-size: 2.5rem;
+    }
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #019796;
+    box-shadow: 0 0 0 0.2rem rgba(1, 151, 150, 0.25);
+}
+
+.btn-login:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(1, 151, 150, 0.5);
+}
+
+.alert-danger {
+    background: linear-gradient(90deg, rgba(255, 127, 80, 0.15) 0%, #ffffff 100%);
+    border-left: 4px solid #FF7F50;
+    color: #cc5533;
+}
+
+.alert-success {
+    background: linear-gradient(90deg, rgba(1, 181, 180, 0.15) 0%, #ffffff 100%);
+    border-left: 4px solid #01b5b4;
+    color: #016d6d;
+}
+
+.alert-info {
+    background: linear-gradient(90deg, rgba(1, 151, 150, 0.15) 0%, #ffffff 100%);
+    border-left: 4px solid #019796;
+    color: #016d6d;
+}
+
+.input-group {
+    transition: transform 0.2s ease;
+}
+
+.input-group:focus-within {
+    transform: translateY(-1px);
+}
+
+.btn-login:focus-visible {
+    outline: 2px solid #019796;
+    outline-offset: 2px;
+}
+
+.form-control:focus-visible {
+    outline: 2px solid #019796;
+    outline-offset: 2px;
+}
+
+/* Decoración adicional en el contenedor */
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #019796, #FF7F50, #019796);
+    border-radius: 20px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.login-container:hover::before {
+    opacity: 0.5;
+}
+
+/* Link de "Olvidé mi contraseña" o similar */
+.login-link {
+    color: #019796;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.login-link:hover {
+    color: #FF7F50;
+    transform: translateX(3px);
+}
+
+/* Checkbox personalizado */
+.form-check-input:checked {
+    background-color: #019796;
+    border-color: #019796;
+}
+
+.form-check-input:focus {
+    border-color: #019796;
+    box-shadow: 0 0 0 0.2rem rgba(1, 151, 150, 0.25);
+}
+
+/* Divisor elegante */
+.login-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.login-divider::before,
+.login-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.login-divider span {
+    padding: 0 1rem;
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+/* Efecto de brillo en el botón */
+.btn-login::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-login:hover::after {
+    opacity: 1;
+    animation: shimmer 1.5s ease-in-out;
+}
+
+.card-header,
+.bg-primary {
+    background: linear-gradient(135deg, #019796 0%, #016d6d 100%) !important;
+    background-color: #019796 !important;
+    color: white !important;
+}
+
+/* Navbar superior azul "Farmacia Coral - Rifas" */
+.navbar,
+.navbar-dark {
+    background: linear-gradient(135deg, #019796 0%, #016d6d 100%) !important;
+    background-color: #019796 !important;
+}
+
+/* Botón verde "Proceder al Pago" */
+.btn-success {
+    background: linear-gradient(145deg, #019796, rgba(1, 151, 150, 0.9)) !important;
+    background-color: #019796 !important;
+    border-color: #019796 !important;
+    color: white !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(145deg, #01b5b4, #019796) !important;
+    background-color: #01b5b4 !important;
+    border-color: #01b5b4 !important;
+    color: white !important;
+}
+
+/* Header del panel verde "Métodos de Pago Disponibles" */
+.bg-success {
+    background: linear-gradient(135deg, #019796 0%, #016d6d 100%) !important;
+    background-color: #019796 !important;
+    color: white !important;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0;
+    }
+}
