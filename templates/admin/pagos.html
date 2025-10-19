@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métodos de Pago - Panel Admin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">
+                <i class="fas fa-arrow-left"></i> Volver al Dashboard
+            </a>
+            <span class="navbar-text">
+                <i class="fas fa-credit-card"></i> Gestión de Métodos de Pago
+            </span>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/admin/rifas">
+                    <i class="fas fa-ticket-alt"></i> Rifas
+                </a>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-university"></i> Métodos de Pago por Rifa
+                        </h5>
+                        <div>
+                            <select class="form-select form-select-sm text-dark" id="filtro-rifa" onchange="filtrarPorRifa()">
+                                <option value="">Todas las rifas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Rifa</th>
+                                        <th>Banco</th>
+                                        <th>Beneficiario</th>
+                                        <th>Cuenta/CLABE</th>
+                                        <th>Tipo</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-pagos">
+                                    <tr>
+                                        <td colspan="8" class="text-center">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Cargando...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-plus"></i> Nuevo Método de Pago
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="form-nuevo-pago">
+                            <div class="mb-3">
+                                <label class="form-label">Seleccionar Rifa</label>
+                                <select class="form-select" id="select-rifa" required>
+                                    <option value="">Seleccionar rifa...</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Banco</label>
+                                <input type="text" class="form-control" id="banco" placeholder="Ej: BBVA Bancomer" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Beneficiario</label>
+                                <input type="text" class="form-control" id="beneficiario" placeholder="Nombre del titular" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Tipo de Cuenta</label>
+                                <select class="form-select" id="tipo-cuenta" onchange="toggleCuentaFields()" required>
+                                    <option value="">Seleccionar tipo...</option>
+                                    <option value="CLABE">CLABE Interbancaria</option>
+                                    <option value="CUENTA">Número de Cuenta</option>
+                                    <option value="TARJETA">Tarjeta</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3" id="campo-numero-cuenta" style="display: none;">
+                                <label class="form-label">Número de Cuenta</label>
+                                <input type="text" class="form-control" id="numero-cuenta" placeholder="Número de cuenta">
+                            </div>
+
+                            <div class="mb-3" id="campo-clabe" style="display: none;">
+                                <label class="form-label">CLABE</label>
+                                <input type="text" class="form-control" id="clabe" placeholder="18 dígitos" maxlength="18">
+                                <div class="form-text">CLABE debe tener exactamente 18 dígitos</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-plus-circle"></i> Agregar Método
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-info-circle"></i> Información
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb"></i>
+                            Los métodos de pago se muestran a los usuarios cuando realizan compras.
+                        </div>
+                        
+                        <h6>Tipos de cuenta:</h6>
+                        <ul class="small">
+                            <li><strong>CLABE:</strong> Para transferencias interbancarias</li>
+                            <li><strong>Cuenta:</strong> Número de cuenta tradicional</li>
+                            <li><strong>Tarjeta:</strong> Para depósitos a tarjeta</li>
+                        </ul>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Importante:</strong> Verifica que los datos bancarios sean correctos antes de agregar.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-editar-pago" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-edit"></i> Editar Método de Pago
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-editar-pago">
+                        <input type="hidden" id="edit-pago-id">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Banco</label>
+                            <input type="text" class="form-control" id="edit-banco" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Beneficiario</label>
+                            <input type="text" class="form-control" id="edit-beneficiario" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Número de Cuenta</label>
+                            <input type="text" class="form-control" id="edit-numero-cuenta">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">CLABE</label>
+                            <input type="text" class="form-control" id="edit-clabe" maxlength="18">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" id="edit-activo">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarEdicionPago()">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="notification-toast" class="toast" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto">Notificación</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toast-message"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/admin.js"></script>
+</body>
+</html>

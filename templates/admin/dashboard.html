@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Panel Admin Rifas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">
+                <i class="fas fa-gift"></i> Panel Admin - Rifas Coral
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/admin/rifas">
+                    <i class="fas fa-ticket-alt"></i> Rifas
+                </a>
+                <a class="nav-link" href="/admin/pagos">
+                    <i class="fas fa-credit-card"></i> Pagos
+                </a>
+                <button class="btn btn-outline-light btn-sm ms-2" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="card-title">Rifas Activas</h5>
+                                <h2 class="mb-0" id="total-rifas">0</h2>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-gift fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card bg-success text-white">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="card-title">Compras Total</h5>
+                                <h2 class="mb-0" id="total-compras">0</h2>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-shopping-cart fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card bg-warning text-white">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="card-title">Ingresos Confirmados</h5>
+                                <h2 class="mb-0">$<span id="ingresos-confirmados">0</span></h2>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-money-bill-wave fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card bg-info text-white">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="card-title">Ingresos Pendientes</h5>
+                                <h2 class="mb-0">$<span id="ingresos-pendientes">0</span></h2>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clock fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list"></i> Rifas Activas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Precio</th>
+                                        <th>Disponibles</th>
+                                        <th>Vendidos</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-rifas">
+                                    <tr>
+                                        <td colspan="6" class="text-center">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Cargando...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-plus"></i> Acciones Rápidas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="/admin/rifas" class="btn btn-primary">
+                                <i class="fas fa-plus-circle"></i> Nueva Rifa
+                            </a>
+                            <a href="/admin/pagos" class="btn btn-success">
+                                <i class="fas fa-credit-card"></i> Gestionar Pagos
+                            </a>
+                            <button class="btn btn-info" onclick="refreshData()">
+                                <i class="fas fa-sync-alt"></i> Actualizar Datos
+                            </button>
+                            <a href="/" target="_blank" class="btn btn-outline-secondary">
+                                <i class="fas fa-external-link-alt"></i> Ver Sitio Público
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-info-circle"></i> Información del Sistema
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="small text-muted mb-1">
+                            <i class="fas fa-server"></i> Sistema de Rifas v1.0
+                        </p>
+                        <p class="small text-muted mb-1">
+                            <i class="fas fa-database"></i> Base de datos: rifafarmaciascoral
+                        </p>
+                        <p class="small text-muted mb-0">
+                            <i class="fas fa-calendar"></i> Última actualización: <span id="ultima-actualizacion">-</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="notification-toast" class="toast" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto">Notificación</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toast-message"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/admin.js"></script>
+</body>
+</html>
