@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Rifas - Panel Admin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin">
+                <i class="fas fa-arrow-left"></i> Volver al Dashboard
+            </a>
+            <span class="navbar-text">
+                <i class="fas fa-ticket-alt"></i> Gestión de Rifas
+            </span>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/admin/pagos">
+                    <i class="fas fa-credit-card"></i> Pagos
+                </a>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list"></i> Lista de Rifas
+                        </h5>
+                        <button class="btn btn-light btn-sm" onclick="refreshRifas()">
+                            <i class="fas fa-sync-alt"></i> Actualizar
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Imagen</th>
+                                        <th>Nombre</th>
+                                        <th>Rango</th>
+                                        <th>Precio</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-rifas-admin">
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Cargando...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-plus"></i> Nueva Rifa
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="form-nueva-rifa" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label">Número del Bot</label>
+                                <input type="text" class="form-control" id="numero-bot" placeholder="Ej: +529541234567" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Nombre de la Rifa</label>
+                                <input type="text" class="form-control" id="nombre-rifa" placeholder="Ej: Rifa Navideña 2024" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <textarea class="form-control" id="descripcion-rifa" rows="3" placeholder="Descripción de la rifa..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Imagen de la Rifa</label>
+                                <input type="file" class="form-control" id="imagen-rifa" accept="image/*">
+                                <div class="form-text">Formatos: JPG, PNG, GIF. Máximo 5MB</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Rango Inicio</label>
+                                        <input type="number" class="form-control" id="rango-inicio" placeholder="1" min="1" required>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Rango Fin</label>
+                                        <input type="number" class="form-control" id="rango-fin" placeholder="1000" min="1" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Precio por Boleto</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="precio-boleto" placeholder="50" min="0" step="0.01" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-plus-circle"></i> Crear Rifa
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-info-circle"></i> Información
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb"></i>
+                            Al crear una rifa se generarán automáticamente todos los boletos del rango especificado.
+                        </div>
+                        
+                        <h6>Funciones:</h6>
+                        <ul class="small">
+                            <li>Crear nuevas rifas</li>
+                            <li>Configurar rangos de números</li>
+                            <li>Establecer precios</li>
+                            <li>Subir imágenes promocionales</li>
+                            <li>Activar/desactivar rifas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-editar-rifa" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-edit"></i> Editar Rifa
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-editar-rifa">
+                        <input type="hidden" id="edit-rifa-id">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Número del Bot</label>
+                                    <input type="text" class="form-control" id="edit-numero-bot" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Precio por Boleto</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="edit-precio-boleto" min="0" step="0.01" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la Rifa</label>
+                            <input type="text" class="form-control" id="edit-nombre-rifa" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea class="form-control" id="edit-descripcion-rifa" rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" id="edit-activa">
+                                <option value="1">Activa</option>
+                                <option value="0">Inactiva</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarEdicionRifa()">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="notification-toast" class="toast" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto">Notificación</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toast-message"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/admin.js"></script>
+</body>
+</html>
